@@ -26,7 +26,6 @@ export class ChatGptAiService {
             }
 
             const response = await this.openai.createCompletion(params);
-            console.log({response});
             return response.data;
             
         } catch (error) {
