@@ -51,7 +51,7 @@ export class ChatGptAiService {
     }
 
     async getEssayTitles() {
-        const title = "give me 10 essay titles for grade 3 with detail hints in json format";
+        const title = "give me 10 essay titles for grade 3 with detail hints in json array format";
         try {
             const completion = await this.openai.createChatCompletion({
                 model: CHAT_GPT_MODEL,
@@ -68,9 +68,9 @@ export class ChatGptAiService {
     }
 
     async validateMyEssay(essayRequest: EssayModel) {
-        //const req = `validate essay writing for topic -  ${essayRequest.title} below ${essayRequest.content} and return marks out of 10. return response in JSON format`;
+        const req = `validate and highlight gramatical mistakes in essay writing for topic -  ${essayRequest.title} below ${essayRequest.content} and return marks out of 10.`;
         //const req = `Could you please validate the content of my essay with title ${essayRequest.title} and rate it out of 10? Here is my essay: ${essayRequest.content}`;
-        const req = `Could you please check for mistakes in the content of my essay for topic ${essayRequest.title} and give marks out of 10? Also check if the length of the essay is enough? Here is my essay: ${essayRequest.content}`;
+        //const req = `Could you please check for mistakes in the content of my essay for topic ${essayRequest.title}. Here is my essay: ${essayRequest.content}`;
         try {
             const completion = await this.openai.createChatCompletion({
                 model: CHAT_GPT_MODEL,
