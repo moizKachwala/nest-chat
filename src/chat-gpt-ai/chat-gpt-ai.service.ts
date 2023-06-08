@@ -21,7 +21,7 @@ export class ChatGptAiService {
     async getModelAnswer(question: string) {
         try {
             const params: CreateCompletionRequest = {
-                prompt: question,
+                prompt: "Evaluate the essay and provide marks out of 10. Also, highlight any mistakes : family is God's greatest gift to all living beings on earth including human beings. A person without family and its love is never codmplete and happy. A family is one with whom you can shadre all your joys and sorrows. Family stands by you at the toughest situations in life.",
                 model:  DAVINCI_MODEL,
                 temperature: DEFAULT_TEMPERATURE
             }
@@ -68,9 +68,10 @@ export class ChatGptAiService {
     }
 
     async validateMyEssay(essayRequest: EssayModel) {
-        const req = `validate and highlight gramatical mistakes in essay writing for topic -  ${essayRequest.title} below ${essayRequest.content} and return marks out of 10.`;
+        //const req = `validate and highlight gramatical mistakes in essay writing for topic -  ${essayRequest.title} below ${essayRequest.content} and return marks out of 10.`;
         //const req = `Could you please validate the content of my essay with title ${essayRequest.title} and rate it out of 10? Here is my essay: ${essayRequest.content}`;
         //const req = `Could you please check for mistakes in the content of my essay for topic ${essayRequest.title}. Here is my essay: ${essayRequest.content}`;
+        const req = `Evaluate the essay with title ${essayRequest.title} and provide marks out of 10. Also, highlight the mistakes : ${essayRequest.content}`;
         try {
             const completion = await this.openai.createChatCompletion({
                 model: CHAT_GPT_MODEL,
