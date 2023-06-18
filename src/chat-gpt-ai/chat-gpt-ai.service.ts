@@ -6,11 +6,6 @@ const DAVINCI_MODEL = "text-davinci-003";
 const CHAT_GPT_MODEL = "gpt-3.5-turbo-0301";
 const DEFAULT_TEMPERATURE = 0.7;
 
-interface ChatResponse {
-    role: string;
-    content: string;
-  }
-
 @Injectable()
 export class ChatGptAiService {
     private readonly openai: OpenAIApi;
@@ -77,6 +72,7 @@ export class ChatGptAiService {
             // // ];
             // this.storeResponse('assistant', title);
             if(this.earlierResponses.length < 1) {
+                //const title = "give me 10 essay titles for grade 3 with detail hints and please return a JSON format response";
                 const title = "give me 10 essay titles for grade 3 with detail hints in json array format";
                 const requestMessage: ChatCompletionRequestMessage = {
                     role: 'user',
@@ -84,6 +80,7 @@ export class ChatGptAiService {
                 };
                 this.earlierResponses.push(requestMessage);
             } else {
+                //const title = "give me more essay titles and please return a JSON format response";
                 const title = "give me more essay titles in json array format";
                 const requestMessage: ChatCompletionRequestMessage = {
                     role: 'user',
@@ -104,7 +101,7 @@ export class ChatGptAiService {
                 };
                 this.earlierResponses.push(requestMessage);
             }
-            // console.log(this.earlierResponses);
+            console.log(response);
             return JSON.parse(response);
             //return response;
         } catch (error) {
@@ -116,7 +113,7 @@ export class ChatGptAiService {
         //const req = `validate and highlight gramatical mistakes in essay writing for topic -  ${essayRequest.title} below ${essayRequest.content} and return marks out of 10.`;
         //const req = `Could you please validate the content of my essay with title ${essayRequest.title} and rate it out of 10? Here is my essay: ${essayRequest.content}`;
         //const req = `Could you please check for mistakes in the content of my essay for topic ${essayRequest.title}. Here is my essay: ${essayRequest.content}`;
-        const req = `Evaluate the essay with title ${essayRequest.title} and provide marks out of 10. Also, highlight the mistakes : ${essayRequest.content}`;
+        const req = `Evaluate the essay with title ${essayRequest.title}. Also, highlight the mistakes in details : ${essayRequest.content}`;
         try {
             const completion = await this.openai.createChatCompletion({
                 model: CHAT_GPT_MODEL,
@@ -133,5 +130,10 @@ export class ChatGptAiService {
         } catch (error) {
             console.log({error});
         }
+    }
+
+
+    jsonParse(data: string) {
+        return JSON.parse(data);
     }
 }
