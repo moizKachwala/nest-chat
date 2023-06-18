@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { Configuration, CreateCompletionRequest, OpenAIApi } from "openai";
+import { ChatCompletionRequestMessage, Configuration, CreateCompletionRequest, OpenAIApi } from "openai";
 import { EssayModel } from './model/essayModel';
 
 const DAVINCI_MODEL = "text-davinci-003";
 const CHAT_GPT_MODEL = "gpt-3.5-turbo-0301";
 const DEFAULT_TEMPERATURE = 0.7;
 
+interface ChatResponse {
+    role: string;
+    content: string;
+  }
+
 @Injectable()
 export class ChatGptAiService {
     private readonly openai: OpenAIApi;
+    earlierResponses: ChatCompletionRequestMessage[] = [];
 
     constructor() {
         const configuration = new Configuration({
@@ -17,6 +23,16 @@ export class ChatGptAiService {
         });
         this.openai = new OpenAIApi(configuration);
     }
+
+    // storeResponse(role: string, content: string): void {
+    //     const response: ChatResponse = { role, content };
+    //     this.earlierResponses.push(response);
+    //   }
+    
+    
+    //   getEarlierResponses(): ChatResponse[] {
+    //     return this.earlierResponses;
+    //   }
 
     async getModelAnswer(question: string) {
         try {
@@ -51,17 +67,46 @@ export class ChatGptAiService {
     }
 
     async getEssayTitles() {
-        const title = "give me 10 essay titles for grade 3 with detail hints in json array format";
+        
         try {
+            // // if(this.earlierResponses.length > 0) {
+                
+            // // }
+            // // const conversations = [
+            // //     {role: "user", content: title},
+            // // ];
+            // this.storeResponse('assistant', title);
+            if(this.earlierResponses.length < 1) {
+                const title = "give me 10 essay titles for grade 3 with detail hints in json array format";
+                const requestMessage: ChatCompletionRequestMessage = {
+                    role: 'user',
+                    content: title,
+                };
+                this.earlierResponses.push(requestMessage);
+            } else {
+                const title = "give me more essay titles in json array format";
+                const requestMessage: ChatCompletionRequestMessage = {
+                    role: 'user',
+                    content: title,
+                };
+                this.earlierResponses.push(requestMessage);
+            }
             const completion = await this.openai.createChatCompletion({
                 model: CHAT_GPT_MODEL,
-                messages: [
-                    {role: "assistant", content: title},
-                ],
+                messages: this.earlierResponses,
                 temperature: DEFAULT_TEMPERATURE,
             });
-
-            return JSON.parse(completion.data.choices[0].message.content);
+            const response = completion.data.choices[0].message.content;
+            if(response) {
+                const requestMessage: ChatCompletionRequestMessage = {
+                    role: 'assistant',
+                    content: response,
+                };
+                this.earlierResponses.push(requestMessage);
+            }
+            // console.log(this.earlierResponses);
+            return JSON.parse(response);
+            //return response;
         } catch (error) {
             console.log({error});
         }
