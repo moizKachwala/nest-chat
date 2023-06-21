@@ -7,24 +7,24 @@ import { EssayModel } from './model/essayModel';
 export class ChatGptAiController {
   constructor(private readonly chatGptAiService: ChatGptAiService) {}
 
-  @Post("/message")
-  getModelAnswer(@Body() data: RequestModel) {
-    return this.chatGptAiService.getModelAnswer(data.question);
-  }
+  // @Post("/message")
+  // getModelAnswer(@Body() data: RequestModel) {
+  //   return this.chatGptAiService.getModelAnswer(data.question);
+  // }
 
-  @Post("/messagegpt")
-  getModelAnswerGPT(@Body() data: RequestModel) {
-    return this.chatGptAiService.getModelAnswerGPT(data.question);
-  }
+  // @Post("/messagegpt")
+  // getModelAnswerGPT(@Body() data: RequestModel) {
+  //   return this.chatGptAiService.getModelAnswerGPT(data.question);
+  // }
 
   @Get("/listEssayTitles")
   getTitles() {
-    return this.chatGptAiService.getEssayTitles();
+    return this.chatGptAiService.getEssayTitles1();
   }
 
-  @Post("/validateEssay")
-  validateEssay(@Body() req: EssayModel) {
-    return this.chatGptAiService.validateMyEssay(req);
-  }
+  // @Post("/validateEssay")
+  // validateEssay(@Body() req: EssayModel) {
+  //   return this.chatGptAiService.validateMyEssay(req);
+  // }
   
 }

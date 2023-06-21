@@ -1,9 +1,19 @@
 import { Module } from '@nestjs/common';
 import { ChatGptAiService } from './chat-gpt-ai.service';
+import { OpenAIService } from 'src/openai/openai.service';
+import {EngineFactory} from 'src/openai/engines/engine.factory';
 import { ChatGptAiController } from './chat-gpt-ai.controller';
+import { TextDavinciEngine } from 'src/openai/engines/text-davinci-engine';
+import { Gpt35TurboEngine } from 'src/openai/engines/gpt35-turbo-engine';
 
 @Module({
   controllers: [ChatGptAiController],
-  providers: [ChatGptAiService]
+  providers: [ChatGptAiService, OpenAIService, EngineFactory, {
+    provide: 'ENGINES',
+    useValue: {
+      'text-davinci-003': new TextDavinciEngine(),
+      'gpt-3.5-turbo-0301': new Gpt35TurboEngine(),
+    },
+  }]
 })
 export class ChatGptAiModule {}
