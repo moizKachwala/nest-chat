@@ -26,7 +26,7 @@ export class TextDavinciEngine implements OpenAIEngine {
       n: numChoices,
     });
 
-    const completion = response.data.choices[0].text;
+    const completion = JSON.stringify(response.data);
     return completion;
   }
 }

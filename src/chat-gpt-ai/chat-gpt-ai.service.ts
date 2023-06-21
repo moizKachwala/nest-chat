@@ -138,7 +138,7 @@ export class ChatGptAiService {
 
     async getEssayTitles1() {
         const prompt = "give me 10 essay titles for grade 3 with detail hints in json array format";
-        const response = await this.openAiService.generateChatResponse(prompt, 'gpt-3.5-turbo-0301');
+        const response = await this.openAiService.generateChatResponse(prompt, 'text-davinci-003');
         return response;
     }
 }
