@@ -3,8 +3,8 @@ import { OpenAIService } from 'src/openai/openai.service';
 // import { ChatCompletionRequestMessage, Configuration, CreateCompletionRequest, OpenAIApi } from "openai";
 // import { EssayModel } from './model/essayModel';
 
-// const DAVINCI_MODEL = "text-davinci-003";
-// const CHAT_GPT_MODEL = "gpt-3.5-turbo-0301";
+const DAVINCI_MODEL = "text-davinci-003";
+const CHAT_GPT_MODEL = "gpt-3.5-turbo-0301";
 // const DEFAULT_TEMPERATURE = 0.7;
 
 @Injectable()
@@ -138,7 +138,7 @@ export class ChatGptAiService {
 
     async getEssayTitles1() {
         const prompt = "give me 10 essay titles for grade 3 with detail hints in json array format";
-        const response = await this.openAiService.generateChatResponse(prompt, 'text-davinci-003');
+        const response = await this.openAiService.generateChatResponse(prompt, DAVINCI_MODEL);
         return response;
     }
 }

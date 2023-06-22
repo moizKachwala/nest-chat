@@ -18,10 +18,11 @@ export class TextDavinciEngine implements OpenAIEngine {
     this.openai = new OpenAIApi(configuration);
   }
 
-  async completePrompt(prompt: string, maxTokens: number = 10, numChoices: number = 1): Promise<string> {
+  async completePrompt(prompt: string, maxTokens: number = 250, numChoices: number = 10): Promise<string> {
     const response = await this.openai.createCompletion({
       model: DAVINCI_MODEL,
       temperature: DEFAULT_TEMPERATURE,
+      max_tokens: maxTokens,
       prompt: prompt,
       n: numChoices,
     });
