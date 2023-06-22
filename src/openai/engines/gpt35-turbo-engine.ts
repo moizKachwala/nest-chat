@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { OpenAIEngine } from './openai-engine.interface';
 import { ChatCompletionRequestMessage, Configuration, CreateCompletionRequest, OpenAIApi } from "openai";
+import { parseJsonResponse } from 'src/utils/jsonParser';
 
 const CHAT_GPT_MODEL = "gpt-3.5-turbo-0301";
 const DEFAULT_TEMPERATURE = 0.7;
@@ -29,7 +30,7 @@ export class Gpt35TurboEngine implements OpenAIEngine {
       temperature: DEFAULT_TEMPERATURE,
     });
 
-    const completion = response.data.choices[0].message.content;
+    const completion = parseJsonResponse(response.data.choices[0].message.content);
     return completion;
   }
 }

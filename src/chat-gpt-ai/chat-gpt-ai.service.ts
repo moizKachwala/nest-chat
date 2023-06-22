@@ -11,7 +11,7 @@ const CHAT_GPT_MODEL = "gpt-3.5-turbo-0301";
 export class ChatGptAiService {
     constructor(private openAiService: OpenAIService) {
         // You can use the openAiService in your methods...
-      }
+    }
     // private readonly openai: OpenAIApi;
     // earlierResponses: ChatCompletionRequestMessage[] = [];
 
@@ -27,8 +27,8 @@ export class ChatGptAiService {
     //     const response: ChatResponse = { role, content };
     //     this.earlierResponses.push(response);
     //   }
-    
-    
+
+
     //   getEarlierResponses(): ChatResponse[] {
     //     return this.earlierResponses;
     //   }
@@ -43,7 +43,7 @@ export class ChatGptAiService {
 
     //         const response = await this.openai.createCompletion(params);
     //         return response.data;
-            
+
     //     } catch (error) {
     //         console.log({error});
     //     }
@@ -66,10 +66,10 @@ export class ChatGptAiService {
     // }
 
     // async getEssayTitles() {
-        
+
     //     try {
     //         // // if(this.earlierResponses.length > 0) {
-                
+
     //         // // }
     //         // // const conversations = [
     //         // //     {role: "user", content: title},
@@ -136,9 +136,14 @@ export class ChatGptAiService {
     //     }
     // }
 
-    async getEssayTitles1() {
-        const prompt = "give me 10 essay titles for grade 3 with detail hints in json array format";
-        const response = await this.openAiService.generateChatResponse(prompt, DAVINCI_MODEL);
-        return response;
+    async getEssayTitles() {
+        const prompt = "give me 10 essay titles for grade 3 with detail hints in json array format.";
+        try {
+            const response = await this.openAiService.generateChatResponse(prompt, CHAT_GPT_MODEL);
+            return response;
+
+        } catch (error) {
+            console.log({ error });
+        }
     }
 }

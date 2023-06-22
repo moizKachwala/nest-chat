@@ -19,7 +19,7 @@ export class ChatGptAiController {
 
   @Get("/listEssayTitles")
   getTitles() {
-    return this.chatGptAiService.getEssayTitles1();
+    return this.chatGptAiService.getEssayTitles();
   }
 
   // @Post("/validateEssay")

@@ -18,7 +18,7 @@ export class TextDavinciEngine implements OpenAIEngine {
     this.openai = new OpenAIApi(configuration);
   }
 
-  async completePrompt(prompt: string, maxTokens: number = 250, numChoices: number = 10): Promise<string> {
+  async completePrompt(prompt: string, maxTokens: number = 1000, numChoices: number = 10): Promise<string> {
     const response = await this.openai.createCompletion({
       model: DAVINCI_MODEL,
       temperature: DEFAULT_TEMPERATURE,
@@ -27,7 +27,7 @@ export class TextDavinciEngine implements OpenAIEngine {
       n: numChoices,
     });
 
-    const completion = JSON.stringify(response.data);
+    const completion = JSON.parse(response.data.choices[0].text);
     return completion;
   }
 }
