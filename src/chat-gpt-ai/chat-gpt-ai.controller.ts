@@ -22,9 +22,8 @@ export class ChatGptAiController {
     return this.chatGptAiService.getEssayTitles();
   }
 
-  // @Post("/validateEssay")
-  // validateEssay(@Body() req: EssayModel) {
-  //   return this.chatGptAiService.validateMyEssay(req);
-  // }
-  
+  @Post("/validateEssay")
+  validateEssay(@Body() req: EssayModel) {
+    return this.chatGptAiService.validateMyEssay(req);
+  }
 }

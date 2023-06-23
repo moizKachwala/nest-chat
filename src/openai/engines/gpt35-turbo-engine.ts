@@ -9,28 +9,32 @@ const DEFAULT_TEMPERATURE = 0.7;
 @Injectable()
 export class Gpt35TurboEngine implements OpenAIEngine {
   private readonly openai: OpenAIApi;
+  private conversationHistory: ChatCompletionRequestMessage[];
 
   constructor() {
     const configuration = new Configuration({
-        organization: process.env.OPENAI_API_ORGANIZATION_ID,
-        apiKey: process.env.OPENAI_API_KEY,
+      organization: process.env.OPENAI_API_ORGANIZATION_ID,
+      apiKey: process.env.OPENAI_API_KEY,
     });
-    console.log({configuration});
     this.openai = new OpenAIApi(configuration);
+    this.conversationHistory = [];
   }
 
   async completePrompt(prompt: string): Promise<string> {
-    
+    this.conversationHistory.push({ role: 'user', content: prompt });
+
     const response = await this.openai.createChatCompletion({
       model: CHAT_GPT_MODEL,
       messages: [
         { role: 'system', content: 'You are a helpful assistant.' },
-        { role: 'user', content: prompt },
+        ...this.conversationHistory,
       ],
       temperature: DEFAULT_TEMPERATURE,
     });
 
-    const completion = parseJsonResponse(response.data.choices[0].message.content);
-    return completion;
+    const completion = response.data.choices[0].message.content;
+    this.conversationHistory.push({ role: 'assistant', content: completion });
+
+    return parseJsonResponse(completion);
   }
 }
