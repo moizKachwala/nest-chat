@@ -1,17 +1,22 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ChatGptAiModule } from './chat-gpt-ai/chat-gpt-ai.module';
+import config from './typeorm.config';
 import { ConfigModule } from '@nestjs/config';
-// import { EngineFactory } from './openai/engines/engine.factory';
-// import { TextDavinciEngine } from './openai/engines/text-davinci-engine';
-// import { Gpt35TurboEngine } from './openai/engines/gpt35-turbo-engine';
-// import { OpenAIModule } from './openai/openai.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
+import { RoleModule } from './role/role.module';
+import { PermissionModule } from './permission/permission.module';
+import { ChatGptAiModule } from './chat-gpt-ai/chat-gpt-ai.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    TypeOrmModule.forRoot(config),
     ChatGptAiModule,
+    UserModule,
+    RoleModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
