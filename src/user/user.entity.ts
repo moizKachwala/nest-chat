@@ -1,8 +1,7 @@
-// user.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Role } from '../role/role.entity';
 
-@Entity()
+@Entity({ name: 'Users' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;

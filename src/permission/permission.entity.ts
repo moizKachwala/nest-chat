@@ -2,7 +2,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
 import { Role } from '../role/role.entity';
 
-@Entity()
+@Entity({ name: 'Permissions' })
 export class Permission {
   @PrimaryGeneratedColumn()
   id: number;
