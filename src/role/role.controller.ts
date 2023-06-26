@@ -24,7 +24,7 @@ export class RoleController {
 
   @Put(':id')
   async updateRole(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() createRoleDto: CreateRoleDto,
   ): Promise<Role> {
     return this.roleService.updateRole(id, createRoleDto);
