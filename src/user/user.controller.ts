@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateOrUpdateUserDto } from './dto/createOrUpdateUser.dto';
 import { User } from './user.entity';
@@ -18,6 +18,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
   async getUserById(@Param('id') id: number): Promise<User | undefined> {
     return this.userService.getUserById(id);
   }
