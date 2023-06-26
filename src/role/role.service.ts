@@ -3,25 +3,38 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Role } from './role.entity';
 import { CreateRoleDto } from './dto/CreateRoleDto';
+import { Permission } from 'src/permission/permission.entity';
 
 @Injectable()
 export class RoleService {
   constructor(
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>,
   ) {}
 
   async getAllRoles(): Promise<Role[]> {
     return this.roleRepository.find();
   }
 
-  async getRoleById(id: string): Promise<Role | undefined> {
-    return this.roleRepository.findOneBy({id: parseInt(id)});
+  async getRoleById(id: number): Promise<Role | undefined> {
+    return this.roleRepository.findOne({ where: {id: id}, relations: {permissions: true}});
   }
 
   async createRole(createRoleDto: CreateRoleDto): Promise<Role> {
-    const newRole = this.roleRepository.create(createRoleDto);
-    return this.roleRepository.save(newRole);
+    const { name, description, permissions } = createRoleDto;
+
+    const role = new Role();
+    role.name = name;
+    role.description = description;
+
+    if (permissions && permissions.length > 0) {
+      const permissionEntities = await this.permissionRepository.findByIds(permissions);
+      role.permissions = permissionEntities;
+    }
+
+    return this.roleRepository.save(role);
   }
 
   async updateRole(id: string, createRoleDto: CreateRoleDto): Promise<Role | undefined> {

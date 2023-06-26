@@ -13,7 +13,7 @@ export class RoleController {
   }
 
   @Get(':id')
-  async getRoleById(@Param('id') id: string): Promise<Role> {
+  async getRoleById(@Param('id') id: number): Promise<Role> {
     return this.roleService.getRoleById(id);
   }
 
