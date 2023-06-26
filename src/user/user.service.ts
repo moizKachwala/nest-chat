@@ -12,7 +12,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async createUser(createUserDto: CreateOrUpdateUserDto): Promise<User> {
     const user = plainToClass(User, createUserDto);
@@ -25,16 +25,20 @@ export class UserService {
   }
 
   async getUserById(id: number): Promise<User | undefined> {
-    return this.userRepository.findOneBy({id: id});
+    return this.userRepository.findOneBy({ id: id });
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User | undefined> {
-    const existingUser = await this.userRepository.findOneBy({id: id});
+    const existingUser = await this.userRepository.findOneBy({ id: id });
     if (!existingUser) {
       return undefined;
     }
 
-    const updatedUser = plainToClass(User, { ...existingUser, ...updateUserDto });
+    const { username, ...updatedData } = updateUserDto;
+
+    // Merge the updated data with the existing user
+    const updatedUser = { ...existingUser, ...updatedData };
+
     await this.validateUser(updatedUser);
     return this.userRepository.save(updatedUser);
   }
@@ -48,10 +52,23 @@ export class UserService {
     if (errors.length > 0) {
       throw new Error(`Validation failed: ${errors[0].constraints}`);
     }
-
-    const existingUser = await this.userRepository.findOneBy({ username: user.username });
-    if (existingUser) {
-      throw new Error('Username is already taken');
+  
+    // Skip the uniqueness validation for the username during the update
+    if (user.id) {
+      const existingUser = await this.userRepository.findOne({
+        where: { username: user.username },
+        select: ['id'],
+      });
+  
+      if (existingUser && existingUser.id !== user.id) {
+        throw new Error('Username is already taken');
+      }
+    } else {
+      // For new user creation, perform the uniqueness check
+      const existingUser = await this.userRepository.findOneBy({ username: user.username });
+      if (existingUser) {
+        throw new Error('Username is already taken');
+      }
     }
   }
 }

@@ -8,6 +8,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @UseInterceptors(ClassSerializerInterceptor)
   async createUser(@Body() createUserDto: CreateOrUpdateUserDto): Promise<User> {
     return this.userService.createUser(createUserDto);
   }
@@ -24,6 +25,7 @@ export class UserController {
   }
 
   @Put(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
   async updateUser(@Param('id') id: number, @Body() updateUserDto: CreateOrUpdateUserDto): Promise<User | undefined> {
     const user = plainToClass(User, updateUserDto);
     return this.userService.updateUser(id, user);
