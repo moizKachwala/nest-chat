@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
 import { ChatGptAiModule } from './chat-gpt-ai/chat-gpt-ai.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ChatGptAiModule } from './chat-gpt-ai/chat-gpt-ai.module';
     UserModule,
     RoleModule,
     PermissionModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

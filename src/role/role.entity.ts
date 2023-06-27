@@ -13,7 +13,7 @@ export class Role {
   @Column()
   description: string;
 
-  @ManyToMany(() => Permission)
+  @ManyToMany(() => Permission, {cascade: true})
   @JoinTable({name: 'RolePermissions'})
   permissions: Permission[];
 

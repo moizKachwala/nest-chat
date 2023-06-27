@@ -6,6 +6,7 @@ import { CreateOrUpdateUserDto } from './dto/CreateOrUpdateUser.dto';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -16,6 +17,10 @@ export class UserService {
 
   async createUser(createUserDto: CreateOrUpdateUserDto): Promise<User> {
     const user = plainToClass(User, createUserDto);
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
+
     await this.validateUser(user);
     return this.userRepository.save(user);
   }
@@ -70,5 +75,9 @@ export class UserService {
         throw new Error('Username is already taken');
       }
     }
+  }
+
+  async findByUsername(username: string): Promise<User | undefined> {
+    return this.userRepository.findOneBy({ username: username});
   }
 }
